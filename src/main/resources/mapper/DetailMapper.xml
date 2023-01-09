@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.qinfengge.rsscode.mapper.DetailMapper">
+
+    <resultMap id="BaseResultMap" type="xyz.qinfengge.rsscode.entity.Detail">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="preview" column="preview" jdbcType="VARCHAR"/>
+            <result property="series" column="series" jdbcType="VARCHAR"/>
+            <result property="pubDate" column="pub_date" jdbcType="VARCHAR"/>
+            <result property="duration" column="duration" jdbcType="INTEGER"/>
+            <result property="actor" column="actor" jdbcType="VARCHAR"/>
+            <result property="prefix" column="prefix" jdbcType="VARCHAR"/>
+            <result property="director" column="director" jdbcType="VARCHAR"/>
+            <result property="isCensored" column="isCensored" jdbcType="INTEGER"/>
+            <result property="aria2Status" column="aria2_status" jdbcType="INTEGER"/>
+            <result property="cnSub" column="cn_sub" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,title,preview,prefix,
+        series,pub_date,duration,actor,
+        director,is_censored,aria2_status,cn_sub,
+        create_time,update_time,is_deleted
+    </sql>
+</mapper>
