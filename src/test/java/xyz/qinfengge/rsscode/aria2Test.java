@@ -6,6 +6,7 @@ import xyz.qinfengge.rsscode.entity.Aria2Option;
 import xyz.qinfengge.rsscode.utils.Aria2Util;
 import xyz.qinfengge.rsscode.utils.RssHandelUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,7 +43,12 @@ public class aria2Test {
     @Test
     public void testXmlParse() throws Exception {
         RssHandelUtil rssHandelUtil = new RssHandelUtil();
-        List<String> list = rssHandelUtil.rssHandel("http://107.173.156.30:1200/javbus/search/SSNI?limit=5");
-        System.err.println(list);
+        List<String> list = rssHandelUtil.rssHandel("http://107.173.156.30:1200/javdb/rankings");
+        List<String> codes = new ArrayList<>();
+        for (String code : list) {
+            String[] strings = code.split(" ");
+            codes.add(strings[0]);
+        }
+        System.err.println(codes);
     }
 }

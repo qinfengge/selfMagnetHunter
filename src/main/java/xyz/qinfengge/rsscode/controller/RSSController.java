@@ -22,15 +22,9 @@ import java.util.Map;
 @RequestMapping("rss")
 public class RSSController {
 
-    @Resource
-    private RssHandelUtil rssHandelUtil;
 
     @Resource
     private ApiHandelUtil apiHandelUtil;
-
-    @Resource
-    private APIConfig apiConfig;
-
 
     @Resource
     private StarsService starsService;

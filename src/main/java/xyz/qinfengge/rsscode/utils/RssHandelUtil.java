@@ -41,7 +41,7 @@ public class RssHandelUtil {
             // 遍历所有文章，并输出标题和 HTML 内容
             for (SyndEntry entry : entries) {
 //                // 获取文章的标题
-//                String title = entry.getTitle();
+                String title = entry.getTitle();
 //                // 获取文章的发布日期
 //                String date = entry.getPublishedDate().toString();
 //                // 获取文章的引用
@@ -49,8 +49,8 @@ public class RssHandelUtil {
 //                String manget = enclosures.get(0).getUrl();
 //
                 // 获取GUID
-                String uri = entry.getUri();
-                code.add(uri);
+//                String uri = entry.getUri();
+                code.add(title);
 //                // 获取文章的链接
 //                String link = entry.getLink();
 //                // 获取文章的作者

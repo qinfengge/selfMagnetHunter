@@ -34,10 +34,8 @@ public class ApiHandelUtil {
     @Resource
     private Detail2Api detail2Api;
 
-    /**
-     * 此标记用于判断是否已执行过list的入库操作
-     */
-    private List<String> flags = new ArrayList<>();
+    @Resource
+    private ThreadPoolUtil threadPoolUtil;
 
     /**
      * 获取番号列表
@@ -78,47 +76,16 @@ public class ApiHandelUtil {
      * @return 返回番号详情
      */
     public List<ApiDetailDto> getMoviesDetail(List<String> list, String type) {
-        List<ApiDetailDto> apiDetailDtoList = new ArrayList<>();
-        List<Detail> detailList = new ArrayList<>();
-        //最大30线程，外加30队列；【拒绝策略AbortPolicy（默认）： 丢弃任务并抛出异常】
-        ExecutorService executorService = new ThreadPoolExecutor(30, 30, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(30), Executors.defaultThreadFactory(), new ThreadPoolExecutor.AbortPolicy());
-        for (String id : list) {
-            Runnable apiRequest = () -> {
-                String url = apiConfig.getJavbusapiUrl() + "movies/" + id;
-                String result = HttpUtil.get(url);
-                ApiDetailDto apiDetailDto = JSONObject.parseObject(result, ApiDetailDto.class);
-                apiDetailDtoList.add(apiDetailDto);
-                if (flags.size() == 0 || !flags.equals(list)) {
-                    Detail d = saveStarsAndDetail(type, apiDetailDto);
-                    detailList.add(d);
-                }
-            };
-            executorService.submit(apiRequest);
-        }
-        executorService.shutdown();
-        try {
-            boolean termination = executorService.awaitTermination(1, TimeUnit.MINUTES);
-            if (termination) {
-                System.err.println("线程池关闭成功");
-                flags = list;
-                detailService.saveOrUpdateBatch(detailList);
-                return apiDetailDtoList;
-            } else {
-                System.err.println("线程池关闭失败");
-            }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
+       return threadPoolUtil.threadUtil(list, type);
     }
 
     /**
      * 保存明星和番号详情
-     * @param type 类型 1：普通，2：无码 可以为空
+     * 类型 1：普通，2：无码，3：未知 可以为空
      * @param apiDetailDto 网络接口对应对象
      * @return 数据库的对应对象
      */
-    private Detail saveStarsAndDetail(String type, ApiDetailDto apiDetailDto) {
+    private Detail saveStarsAndDetail(ApiDetailDto apiDetailDto) {
         //保存演员信息
         StarsDto[] stars = apiDetailDto.getStars();
         //对于合集番号，只截取10个女优，防止超出数据库长度及增加耗时
@@ -128,9 +95,9 @@ public class ApiHandelUtil {
         saveStars(stars);
         apiDetailDto.setStars(stars);
         //设置类型
-        apiDetailDto.setIsCensored(type);
+        apiDetailDto.setIsCensored("3");
         Detail d = detail2Api.a2d(apiDetailDto);
-        d.setIsCensored(type);
+        d.setIsCensored("3");
         return d;
     }
 
@@ -178,7 +145,7 @@ public class ApiHandelUtil {
             String result = HttpUtil.get(movieUrl);
             ApiDetailDto apiDetailDto = JSONObject.parseObject(result, ApiDetailDto.class);
             if (apiDetailDto.getId() != null) {
-                detailService.saveOrUpdate(saveStarsAndDetail(null, apiDetailDto));
+                detailService.saveOrUpdate(saveStarsAndDetail(apiDetailDto));
                 return apiDetailDto;
             }
         }
