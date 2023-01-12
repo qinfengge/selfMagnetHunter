@@ -12,11 +12,12 @@
             <result property="path" column="path" jdbcType="VARCHAR"/>
             <result property="auth" column="auth" jdbcType="VARCHAR"/>
             <result property="maxTask" column="max_task" jdbcType="INTEGER"/>
+            <result property="isDefault" column="is_default" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,name,host,
         port,path,auth,
-        max_task
+        max_task,is_default
     </sql>
 </mapper>

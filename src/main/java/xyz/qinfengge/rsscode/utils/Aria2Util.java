@@ -17,6 +17,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -34,10 +35,12 @@ import java.util.UUID;
 //无参构造方法
 @NoArgsConstructor
 @Slf4j
+@Component
 public class Aria2Util {
     /**
      * 方法名常量
      */
+    public final static String METHOD_GET_VERSION = "aria2.getVersion";
     public final static String METHOD_TELL_ACTIVE = "aria2.tellActive";
     public final static String METHOD_ADD_URI = "aria2.addUri";
     public final static String METHOD_GET_GLOBAL_STAT = "aria2.getGlobalStat";
@@ -63,6 +66,14 @@ public class Aria2Util {
     public Aria2Util addParam(Object obj) {
         params.add(obj);
         return this;
+    }
+
+    public static String getVersion(String url, String auth) {
+        Aria2Util aria2Util = new Aria2Util();
+        aria2Util.setMethod(METHOD_GET_VERSION)
+                .addParam("token:" + auth)
+                .addParam(PARAM_ARRAY_OF_FILED);
+        return aria2Util.send(url);
     }
 
     public static String tellActive(String url, String auth) {

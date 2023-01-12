@@ -52,6 +52,11 @@ public class Aria2 implements Serializable {
     private Integer maxTask;
 
     /**
+     * 是否默认下载器
+     */
+    private Integer isDefault;
+
+    /**
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
