@@ -56,6 +56,9 @@ public class Aria2 implements Serializable {
      */
     private Integer isDefault;
 
+    @TableField(exist = false)
+    private Boolean defaultStatus;
+
     /**
      * 创建时间
      */
@@ -76,4 +79,9 @@ public class Aria2 implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
+
+    public void setIsDefault(Integer isDefault) {
+        this.isDefault = isDefault;
+        this.defaultStatus = isDefault == 1;
+    }
 }

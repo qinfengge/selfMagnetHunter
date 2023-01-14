@@ -11,7 +11,6 @@ import xyz.qinfengge.rsscode.service.DownloadService;
 import xyz.qinfengge.rsscode.utils.Aria2Util;
 
 import javax.annotation.Resource;
-import java.net.URISyntaxException;
 import java.util.List;
 
 /**
@@ -33,21 +32,11 @@ public class Aria2Controller {
 
     @PostMapping("add")
     public Result<Object> addAria2(@RequestBody Aria2 aria2) {
-        int insert = aria2Service.getBaseMapper().insert(aria2);
-        if (insert > 0) {
+        boolean result = aria2Service.saveOrUpdate(aria2);
+        if (result) {
             return getAria2Status(aria2.getId());
         } else {
             return Result.fail("添加失败");
-        }
-    }
-
-    @PutMapping("update")
-    public Result<Object> updateAria2(@RequestBody Aria2 aria2) {
-        int i = aria2Service.getBaseMapper().updateById(aria2);
-        if (i > 0) {
-            return Result.ok();
-        } else {
-            return Result.fail();
         }
     }
 
